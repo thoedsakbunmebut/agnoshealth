@@ -19,3 +19,6 @@ node_modules/
 # OS noise
 .DS_Store
 *.log
+
+# Local agent tooling
+.claude/
