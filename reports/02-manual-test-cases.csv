@@ -1,0 +1,159 @@
+﻿Test Case ID,Module,Title,Priority,Preconditions,Test Steps,Test Data,Expected Result,Actual Result,Status,Defect ID,Notes
+TC-REG-01,Registration,Register a new account with valid details,High,Browser is on the sign-up page,"1. Enter a unique e-mail
+2. Enter a policy-compliant password
+3. Repeat it in Confirm Password
+4. Click Confirm",qa.manual.001@example.com / Passw0rd@,"Account is created. 'Your account has been created' and an approval notice are shown, then the app returns to the login page.",As expected. Redirected to /ai_dashboard/login with the approval notice.,Pass,,New accounts require approval before they can sign in
+TC-REG-02,Registration,Confirm Password must match Password,High,Browser is on the sign-up page,"1. Enter a unique e-mail
+2. Enter Passw0rd@
+3. Enter Different1@ in Confirm Password
+4. Click Confirm",Passw0rd@ / Different1@,Registration is blocked and 'Confirm password does not match the password.' is shown.,As expected.,Pass,,"Validation only fires on submit, not on blur"
+TC-REG-03,Registration,Reject a password shorter than 8 characters,Medium,Browser is on the sign-up page,"1. Enter a unique e-mail
+2. Enter Ab1@ in both password fields
+3. Click Confirm",Ab1@,Registration is blocked and the password policy message is shown.,As expected.,Pass,,
+TC-REG-04,Registration,Reject a password with no uppercase letter,Medium,Browser is on the sign-up page,"1. Enter a unique e-mail
+2. Enter passw0rd@ in both password fields
+3. Click Confirm",passw0rd@,Registration is blocked and the password policy message is shown.,As expected.,Pass,,
+TC-REG-05,Registration,Reject a password with no digit,Medium,Browser is on the sign-up page,"1. Enter a unique e-mail
+2. Enter Password@ in both password fields
+3. Click Confirm",Password@,Registration is blocked and the password policy message is shown.,As expected.,Pass,,
+TC-REG-06,Registration,Reject a password with no special character,Medium,Browser is on the sign-up page,"1. Enter a unique e-mail
+2. Enter Passw0rd1 in both password fields
+3. Click Confirm",Passw0rd1,Registration is blocked and the password policy message is shown.,As expected.,Pass,,
+TC-REG-07,Registration,Accept '!' as a special character,High,Browser is on the sign-up page,"1. Enter a unique e-mail
+2. Enter Passw0rd! in both password fields
+3. Click Confirm",Passw0rd!,"Accepted. Passw0rd! is 9 characters with an uppercase letter, a digit and a special character, which is every rule the on-screen message states.","REJECTED with the password policy message. The same password with '@' instead of '!' is accepted, so '!' is not in the implemented allow-list.",Fail,BUG-005,Isolated by changing only the special character
+TC-REG-08,Registration,Reject a malformed e-mail address,Medium,Browser is on the sign-up page,"1. Enter not-an-email
+2. Enter Passw0rd@ in both password fields
+3. Click Confirm",not-an-email,Registration is blocked with an e-mail format message.,"Registration is blocked, but no e-mail-specific message is shown and the field is type=text so the browser performs no native check.",Pass,,The login page uses type=email for the same field - inconsistent
+TC-REG-09,Registration,Confirm stays disabled until every field is filled,Medium,Browser is on the sign-up page,"1. Observe the Confirm button
+2. Fill the fields one at a time, checking the button after each",-,"Confirm is disabled until e-mail, password and confirm password are all non-empty.",As expected.,Pass,,
+TC-REG-10,Registration,Reject an e-mail that is already registered,High,Browser is on the sign-up page,"1. Enter test@gmail.com
+2. Enter Passw0rd@ in both password fields
+3. Click Confirm",test@gmail.com,Registration is blocked with a duplicate-account message.,"Blocked, but the message does not state that the address is already taken.",Pass,,"Minor usability gap, not raised as a defect"
+TC-REG-11,Registration,Password fields mask their input,Medium,Browser is on the sign-up page,"1. Type into Password
+2. Observe the characters
+3. Click the reveal icon",Passw0rd@,Characters are masked by default and revealed only when the toggle is used.,As expected.,Pass,,
+TC-REG-12,Registration,Password and Confirm Password have distinct DOM ids,Low,Browser is on the sign-up page,1. Inspect both password inputs in DevTools,-,Each input has a unique id and an associated label.,Both inputs carry id='password'. Neither has a <label for> or aria-label.,Fail,BUG-006,Invalid HTML; blocks getByLabel in automation
+TC-LOGIN-01,Login,Sign in with valid credentials,Critical,Browser is on the login page and no user is signed in,"1. Enter test@gmail.com
+2. Enter 12345
+3. Click Sign in",test@gmail.com / 12345,Signed in. The app lands on /ai_dashboard and the sidebar shows the user's name and Log Out.,As expected. Sidebar shows 'นางสาว Natt Test'.,Pass,,Cold load takes 25-30 s
+TC-LOGIN-02,Login,Reject a valid user with the wrong password,High,Browser is on the login page and no user is signed in,"1. Enter test@gmail.com
+2. Enter a wrong password
+3. Click Sign in",test@gmail.com / definitely-wrong,Sign-in is refused and 'Wrong email or password. Please try again' is shown.,As expected.,Pass,,See TC-LOGIN-11 for the status code
+TC-LOGIN-03,Login,Reject an unknown user,High,Browser is on the login page and no user is signed in,"1. Enter an address that has never registered
+2. Enter any password
+3. Click Sign in",no.such.user@example.com / Passw0rd@,"Sign-in is refused with the same generic message, revealing nothing about which accounts exist.",As expected.,Pass,,Correct - no user enumeration
+TC-LOGIN-04,Login,Sign in stays disabled while a field is empty,Medium,Browser is on the login page and no user is signed in,"1. Observe Sign in with both fields empty
+2. Fill e-mail only
+3. Fill password
+4. Clear e-mail again",-,Sign in is disabled unless both fields are non-empty.,As expected.,Pass,,
+TC-LOGIN-05,Login,Reject a malformed e-mail address,Medium,Browser is on the login page and no user is signed in,"1. Enter not-an-email
+2. Enter any password
+3. Click Sign in",not-an-email / Passw0rd@,"Sign-in is refused, ideally with a format-specific message.",Refused with the generic credentials message; the request is still sent to the server.,Pass,,No client-side format check
+TC-LOGIN-06,Login,Sign out returns to the login screen,Critical,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,1. Click Log Out in the sidebar,-,The app returns to /ai_dashboard/login and the login form is shown.,As expected.,Pass,,
+TC-LOGIN-07,Login,Sign out clears the session and personal data,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Click Log Out
+2. Open DevTools > Application > Local Storage
+3. Inspect session, user, hospital, persist:root",-,Every authentication and patient-data key is removed so the next person at the machine cannot recover them.,"Only user_name is removed. session still holds a valid JWT access token; user and persist:root still hold e-mail, gender, date of birth, height, weight and name; hospital is still 12345.",Fail,BUG-002,Serious on a shared hospital workstation
+TC-LOGIN-08,Login,Session survives a page reload,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Press F5
+2. Wait for the app to reload",-,The user stays signed in and the Diagnosis List is shown again.,As expected.,Pass,,
+TC-LOGIN-09,Login,Unauthenticated visitor is sent to the login screen,High,Browser is on the login page and no user is signed in,1. Navigate directly to /ai_dashboard,-,The visitor is redirected to the login screen and no patient data is visible.,"The login card is shown, but it is an overlay drawn on top of a fully rendered dashboard shell - sidebar, filters and table headers are all in the DOM before authentication.",Pass,,"No data leaks, but the shell should not render pre-auth"
+TC-LOGIN-10,Login,Back button after sign-out does not restore the session,High,Browser is on the login page and no user is signed in,"1. Sign in
+2. Sign out
+3. Press the browser Back button",-,The user stays signed out and is kept on the login screen.,As expected - the login form is shown.,Pass,,
+TC-LOGIN-11,Login,"Failed sign-in returns 401, not 500",Medium,Browser is on the login page and no user is signed in,"1. Open DevTools > Network
+2. Sign in with a wrong password
+3. Inspect the /api/ai_dashboard/login response",test@gmail.com / definitely-wrong,HTTP 401 Unauthorized (or 400) identifying the failure as bad credentials.,"HTTP 500 with {""error_message"":""internal_server_error""}. Reproduced with a wrong password, an unknown user and a malformed address.",Fail,BUG-004,A real outage would look identical to a typo
+TC-LOGIN-12,Login,Password field masks input on the login screen,Low,Browser is on the login page and no user is signed in,"1. Type a password
+2. Click the reveal icon",12345,Characters are masked by default and revealed only on demand.,As expected.,Pass,,
+TC-NAV-01,Navigation,Sidebar shows the signed-in user and the Diagnosis List,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,1. Inspect the sidebar,-,"The user's display name, a Diagnosis List entry and Log Out are visible.",As expected.,Pass,,Only one navigation destination exists
+TC-NAV-02,Navigation,All toolbar controls render,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,1. Inspect the toolbar,-,"Download, date range, Channel, the search box, Search and the Total cases counter are all visible.",As expected.,Pass,,
+TC-NAV-03,Navigation,Open tab loads,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,1. Click the Open tab,-,The tab is highlighted and the records table and counter are rendered.,"Table renders, but the counter always reads 0 because the listing API fails.",Pass,BUG-001,Passes structurally only
+TC-NAV-04,Navigation,In progress tab loads,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,1. Click the In progress tab,-,The tab is highlighted and the records table and counter are rendered.,"Table renders, counter reads 0.",Pass,BUG-001,Passes structurally only
+TC-NAV-05,Navigation,Completed tab loads,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,1. Click the Completed tab,-,The tab is highlighted and the records table and counter are rendered.,"Table renders, counter reads 0.",Pass,BUG-001,Passes structurally only
+TC-NAV-06,Navigation,Completed tab adds a 'Completed by' column,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Note the columns on the Open tab
+2. Switch to Completed and compare",-,"Open shows Date-time, Name, Diagnosis, Channel. Completed adds Completed by.",As expected.,Pass,,
+TC-NAV-07,Navigation,All five triage chips are present,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,1. Inspect the triage row,-,"All, Self care, Seek Medical, Urgent and Emergency are shown.","As expected. Note the API enum also carries VISIT_PSYCO, VISIT_DEP_MENTAL_HEALTH and VISIT_DOCTOR, which the UI never exposes.",Pass,,Possible coverage gap - flagged for the product team
+TC-NAV-08,Navigation,Channel dropdown opens and lists every channel,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,1. Click Channel,-,"All, Agnos application, Vimut hospital, Vimut telemed and Siam smile are listed.",As expected.,Pass,,
+TC-NAV-09,Navigation,Date-range picker offers the documented presets,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,1. Click Select date,-,"Today, This week, This month, This year, Last week, Last 14 days, Last month, Last 60 days, Last 90 days and Last year are offered.",As expected.,Pass,,
+TC-NAV-10,Navigation,Selected tab survives a page reload,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Switch to the Completed tab
+2. Press F5",-,The Completed tab is still selected after the reload.,"The view resets to the default tab. Tab state is not in the URL, so it cannot be deep-linked, bookmarked or restored.",Fail,,Raised as an observation rather than a numbered defect
+TC-NAV-11,Navigation,Pagination controls render,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,1. Inspect the area above the table,-,"A page-size range, the current page number and previous/next controls are shown.","Controls render and read '1 - 10' and page 1, but cannot be exercised with no data.",Blocked,BUG-001,
+TC-NAV-12,Navigation,Clicking a record opens its detail view,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,1. Click any row in the table,-,The record's detail view opens with the patient's symptom-check information.,Cannot be executed - the table never contains a row.,Blocked,BUG-001,
+TC-SRCH-01,Search,Search finds a record created during the session,Critical,A new AI record has been generated at https://dev.app.agnoshealth.com,"1. Generate a record through the consumer symptom check
+2. Return to the dashboard
+3. Search for the resulting diagnosis
+4. Click Search",Diagnosis: คอหอยอักเสบ,The matching record appears in the table and Total cases is at least 1.,"A record was generated successfully (คอหอยอักเสบ, 40%, self-care) but the dashboard shows 0 cases because every listing request fails with HTTP 500.",Fail,BUG-001,The primary search scenario cannot be verified
+TC-SRCH-02,Search,Unknown term returns an empty result,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Type zzz-no-such-patient-zzz
+2. Click Search",zzz-no-such-patient-zzz,Total cases reads 0 and the empty-state message is shown.,As expected - but indistinguishable from the permanent failure state.,Pass,BUG-003,Passes vacuously
+TC-SRCH-03,Search,Clearing the search restores the full list,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Search for a term with no matches
+2. Clear the box
+3. Click Search",-,The unfiltered list is restored.,Cannot be verified - both states show 0 records.,Blocked,BUG-001,
+TC-SRCH-04,Search,Partial name match returns results,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Enter the first few letters of a patient's name
+2. Click Search",Som,Records whose name contains the fragment are returned.,Cannot be executed - no data.,Blocked,BUG-001,
+TC-SRCH-05,Search,Search by record ID,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Copy a record ID from the table
+2. Paste it into the search box
+3. Click Search",-,The single matching record is returned.,Cannot be executed - no data.,Blocked,BUG-001,
+TC-SRCH-06,Search,SQL-injection style input is handled safely,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Enter ' OR 1=1 --
+2. Click Search",' OR 1=1 --,"The application stays up, returns no unexpected rows and shows no database error.",The app stays up and shows no database error.,Pass,,Cannot fully confirm the no-extra-rows part while the list is empty
+TC-SRCH-07,Search,Script input is not executed,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Enter <script>alert(1)</script>
+2. Click Search",<script>alert(1)</script>,No dialog appears and the markup is treated as plain text.,As expected - no dialog fired.,Pass,,
+TC-SRCH-08,Search,Whitespace-only term behaves as an empty search,Low,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Enter three spaces
+2. Click Search",'   ',The result is the same as an empty search.,As expected.,Pass,,Passes vacuously
+TC-SRCH-09,Search,The typed term stays visible after searching,Low,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Enter Somchai
+2. Click Search",Somchai,The search box still shows the term so the user can refine it.,As expected.,Pass,,
+TC-FLT-01,Filter,Filter by the 'Self care' triage,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Click the Self care triage chip
+2. Inspect the resulting rows",-,Only records triaged as Self care are listed.,"The request is sent and the table re-renders, but no rows are ever returned.",Blocked,BUG-001,
+TC-FLT-02,Filter,Filter by the 'Seek Medical' triage,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Click the Seek Medical triage chip
+2. Inspect the resulting rows",-,Only records triaged as Seek Medical are listed.,"The request is sent and the table re-renders, but no rows are ever returned.",Blocked,BUG-001,
+TC-FLT-03,Filter,Filter by the 'Urgent' triage,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Click the Urgent triage chip
+2. Inspect the resulting rows",-,Only records triaged as Urgent are listed.,"The request is sent and the table re-renders, but no rows are ever returned.",Blocked,BUG-001,
+TC-FLT-04,Filter,Filter by the 'Emergency' triage,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Click the Emergency triage chip
+2. Inspect the resulting rows",-,Only records triaged as Emergency are listed.,"The request is sent and the table re-renders, but no rows are ever returned.",Blocked,BUG-001,
+TC-FLT-05,Filter,Filter by the 'Agnos application' channel,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Open the Channel dropdown
+2. Choose Agnos application
+3. Inspect the Channel column",-,Every listed record's channel is Agnos application.,"The request is sent and the table re-renders, but no rows are ever returned.",Blocked,BUG-001,
+TC-FLT-06,Filter,Filter by the 'Vimut hospital' channel,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Open the Channel dropdown
+2. Choose Vimut hospital
+3. Inspect the Channel column",-,Every listed record's channel is Vimut hospital.,"The request is sent and the table re-renders, but no rows are ever returned.",Blocked,BUG-001,
+TC-FLT-07,Filter,Filter by the 'Vimut telemed' channel,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Open the Channel dropdown
+2. Choose Vimut telemed
+3. Inspect the Channel column",-,Every listed record's channel is Vimut telemed.,"The request is sent and the table re-renders, but no rows are ever returned.",Blocked,BUG-001,
+TC-FLT-08,Filter,Filter by the 'Siam smile' channel,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Open the Channel dropdown
+2. Choose Siam smile
+3. Inspect the Channel column",-,Every listed record's channel is Siam smile.,"The request is sent and the table re-renders, but no rows are ever returned.",Blocked,BUG-001,
+TC-FLT-09,Filter,Filter to today's records,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Open the date picker
+2. Choose Today
+3. Inspect the Date-time column",-,Only records dated today are listed.,Cannot be verified - no rows.,Blocked,BUG-001,
+TC-FLT-10,Filter,A narrower date range never returns more records,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Choose Last 90 days and note the count
+2. Choose Today and note the count",-,The Today count is less than or equal to the 90-day count.,Both counts are 0.,Pass,BUG-001,Passes vacuously
+TC-FLT-11,Filter,"Combine triage, channel and date range",High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Choose the Urgent triage
+2. Choose the Agnos application channel
+3. Choose Last 90 days",-,Only records matching all three conditions are listed.,Cannot be verified - no rows.,Blocked,BUG-001,
+TC-FLT-12,Filter,Combine a filter with a search term,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Choose the Self care triage
+2. Search for a term",-,Results satisfy both the filter and the search.,Cannot be verified - no rows.,Blocked,BUG-001,
+TC-FLT-13,Filter,Reselecting All clears the triage filter,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Choose Emergency
+2. Choose All
+3. Compare with the starting count",-,The full list is restored.,Both counts are 0.,Pass,BUG-001,Passes vacuously
+TC-FLT-14,Filter,An inverted custom date range is rejected or normalised,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Open the date picker
+2. Set a start date later than the end date",-,"The range is rejected with a message, or silently normalised.",Cannot be executed - the picker exposes presets only in this build.,Blocked,,No custom range control found
+TC-DL-01,Download,Download opens a confirmation modal,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,1. Click Download,-,A confirmation modal with confirm and cancel actions is shown.,"As expected, but the modal title is misspelled as 'ยินยันการดาวน์โหลด'.",Pass,BUG-008,
+TC-DL-02,Download,Cancelling the export downloads nothing,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Click Download
+2. Click ยกเลิก",-,The modal closes and no file is downloaded.,As expected.,Pass,,
+TC-DL-03,Download,Confirming the export downloads a CSV,Critical,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Click Download
+2. Click ยืนยัน",-,"A .csv file is downloaded, is non-empty and contains a header row.",No file is produced. No network request is sent at all and the success toast stays hidden.,Fail,BUG-007,Confounded by BUG-001 - there is nothing to export
+TC-DL-04,Download,Exporting with no records gives feedback,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Search for a term with no matches
+2. Click Download
+3. Click ยืนยัน",zzz-no-such-patient-zzz,"The Download button is disabled, or the app reports that there is nothing to export.","Nothing happens - no request, no file, no message, and the modal stays open.",Fail,BUG-007,
+TC-DL-05,Download,The export respects the active filters,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Choose the Completed tab and the Self care triage
+2. Download and confirm
+3. Open the CSV",-,The CSV contains only records matching the active tab and filters.,Cannot be verified - no file is produced.,Blocked,"BUG-001, BUG-007",
+TC-DL-06,Download,Exported CSV columns match the table,Medium,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Download the CSV
+2. Compare its header row with the table columns",-,"The CSV header matches Date-time, Name, Diagnosis, Channel and, on Completed, Completed by.",Cannot be verified - no file is produced.,Blocked,"BUG-001, BUG-007",
+TC-GEN-01,General,Dashboard reports an error when the backend fails,High,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Open the Diagnosis List while the listing API is returning 500
+2. Observe the page",-,"An error message such as 'Unable to load records' is shown, ideally with a retry.",The page shows 'Total cases : 0' and the empty-state message - visually identical to a genuinely empty list. Nothing indicates a failure.,Fail,BUG-003,Staff cannot tell an empty queue from an outage
+TC-GEN-02,General,Record listing endpoint responds successfully,Critical,Signed in to the AI dashboard as test@gmail.com and on the Diagnosis List,"1. Sign in
+2. Open DevTools > Network
+3. Inspect POST /api/ai_dashboard/dashboard",-,HTTP 200 with the record list.,"HTTP 500 {""error_message"":""internal_server_error""} on every call. Reproduced across all three status values, every channel combination, with and without dates, with an empty body, and on three retries 20 minutes apart.",Fail,BUG-001,Blocks four of the six required scenarios
+TC-GEN-03,General,Dashboard routes return HTTP 200,Low,Browser is on the login page and no user is signed in,"1. Open DevTools > Network
+2. Navigate to /ai_dashboard",-,The document responds 200.,The document responds 404 while still rendering the SPA correctly - a static-hosting fallback misconfiguration.,Fail,,Observation - no user-visible impact
+TC-GEN-04,General,"The suite runs on Chromium, Firefox and WebKit",Medium,Playwright and its browsers are installed,1. Run the automated suite against each project,-,The same results are produced on all three engines.,See the execution summary for the per-browser breakdown.,Pass,,

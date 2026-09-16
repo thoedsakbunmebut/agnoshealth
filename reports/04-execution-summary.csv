@@ -1,0 +1,212 @@
+﻿AUTOMATED EXECUTION SUMMARY
+
+Run date,2026-09-16
+Playwright version,1.63.0
+Node version,22.13.1
+Target,https://dev.app.agnoshealth.com
+Browsers,"Chromium, Firefox, WebKit"
+Wall-clock duration,21.0 min
+
+Total tests,175
+Pass,153
+Fail,21
+Flaky,1
+Pass rate,87.4%
+
+NOTE,"Every failure below is a defect in the application, not an unstable test. The 21 failures are 7 distinct issues reproducing across the three browsers. Tests assert correct behaviour, so they fail while the defect is open and will pass once it is fixed."
+NOTE,"Many filter and search tests pass vacuously: the listing endpoint returns HTTP 500 (BUG-001) so every result set is empty, and an empty-in/empty-out assertion holds. They are marked Blocked rather than Pass in the manual test-case sheet."
+
+BY MODULE
+Module,Total,Pass,Fail,Flaky
+auth (setup),1,1,0,0
+download,15,9,6,0
+filter,39,39,0,0
+login,30,23,6,1
+navigation,42,39,3,0
+registration,27,24,3,0
+search,21,18,3,0
+
+BY BROWSER
+Browser,Total,Pass,Fail,Flaky
+chromium,58,51,7,0
+firefox,58,51,7,0
+setup,1,1,0,0
+webkit,58,50,7,1
+
+PER-TEST DETAIL
+Test ID,Spec File,Browser,Test Name,Result,Duration (s),Retries,Known Defect,Failure Reason
+,tests/auth.setup.ts,setup,authenticate as the shared dashboard user,Pass,3.1,0,,
+TC-DL-01,tests/download.spec.ts,chromium,Record download › TC-DL-01 opens a confirmation modal before exporting,Pass,3.0,0,,
+TC-DL-01,tests/download.spec.ts,firefox,Record download › TC-DL-01 opens a confirmation modal before exporting,Pass,6.1,0,,
+TC-DL-01,tests/download.spec.ts,webkit,Record download › TC-DL-01 opens a confirmation modal before exporting,Pass,12.1,0,,
+TC-DL-02,tests/download.spec.ts,chromium,Record download › TC-DL-02 cancels the export without downloading anything,Pass,8.2,0,,
+TC-DL-02,tests/download.spec.ts,firefox,Record download › TC-DL-02 cancels the export without downloading anything,Pass,11.5,0,,
+TC-DL-02,tests/download.spec.ts,webkit,Record download › TC-DL-02 cancels the export without downloading anything,Pass,17.4,0,,
+TC-DL-03,tests/download.spec.ts,chromium,Record download › TC-DL-03 downloads a non-empty CSV file,Fail,69.6,1,BUG-007,Error: confirming the export must produce a file
+TC-DL-03,tests/download.spec.ts,firefox,Record download › TC-DL-03 downloads a non-empty CSV file,Fail,76.0,1,BUG-007,Error: confirming the export must produce a file
+TC-DL-03,tests/download.spec.ts,webkit,Record download › TC-DL-03 downloads a non-empty CSV file,Fail,81.2,1,BUG-007,Error: confirming the export must produce a file
+TC-DL-04,tests/download.spec.ts,chromium,Record download › TC-DL-04 gives feedback when there is nothing to export [BUG-007],Pass,26.3,0,BUG-007,
+TC-DL-04,tests/download.spec.ts,firefox,Record download › TC-DL-04 gives feedback when there is nothing to export [BUG-007],Pass,12.3,0,BUG-007,
+TC-DL-04,tests/download.spec.ts,webkit,Record download › TC-DL-04 gives feedback when there is nothing to export [BUG-007],Pass,17.8,0,BUG-007,
+TC-DL-05,tests/download.spec.ts,chromium,Record download › TC-DL-05 exports what the active filters select,Fail,105.3,1,"BUG-001, BUG-007",Error: confirming the export must produce a file
+TC-DL-05,tests/download.spec.ts,firefox,Record download › TC-DL-05 exports what the active filters select,Fail,104.2,1,"BUG-001, BUG-007",Error: confirming the export must produce a file
+TC-DL-05,tests/download.spec.ts,webkit,Record download › TC-DL-05 exports what the active filters select,Fail,82.4,1,"BUG-001, BUG-007",Error: confirming the export must produce a file
+TC-FLT-01,tests/filter.spec.ts,chromium,"Record filtering › TC-FLT-01 filters by the ""Emergency"" triage",Pass,2.7,0,,
+TC-FLT-01,tests/filter.spec.ts,firefox,"Record filtering › TC-FLT-01 filters by the ""Emergency"" triage",Pass,5.3,0,,
+TC-FLT-01,tests/filter.spec.ts,webkit,"Record filtering › TC-FLT-01 filters by the ""Emergency"" triage",Pass,16.0,0,,
+TC-FLT-01,tests/filter.spec.ts,chromium,"Record filtering › TC-FLT-01 filters by the ""Seek Medical"" triage",Pass,3.1,0,,
+TC-FLT-01,tests/filter.spec.ts,firefox,"Record filtering › TC-FLT-01 filters by the ""Seek Medical"" triage",Pass,17.6,0,,
+TC-FLT-01,tests/filter.spec.ts,webkit,"Record filtering › TC-FLT-01 filters by the ""Seek Medical"" triage",Pass,6.7,0,,
+TC-FLT-01,tests/filter.spec.ts,chromium,"Record filtering › TC-FLT-01 filters by the ""Self care"" triage",Pass,1.4,0,,
+TC-FLT-01,tests/filter.spec.ts,firefox,"Record filtering › TC-FLT-01 filters by the ""Self care"" triage",Pass,4.5,0,,
+TC-FLT-01,tests/filter.spec.ts,webkit,"Record filtering › TC-FLT-01 filters by the ""Self care"" triage",Pass,6.7,0,,
+TC-FLT-01,tests/filter.spec.ts,chromium,"Record filtering › TC-FLT-01 filters by the ""Urgent"" triage",Pass,1.4,0,,
+TC-FLT-01,tests/filter.spec.ts,firefox,"Record filtering › TC-FLT-01 filters by the ""Urgent"" triage",Pass,7.0,0,,
+TC-FLT-01,tests/filter.spec.ts,webkit,"Record filtering › TC-FLT-01 filters by the ""Urgent"" triage",Pass,6.4,0,,
+TC-FLT-02,tests/filter.spec.ts,chromium,"Record filtering › TC-FLT-02 filters by the ""Agnos application"" channel",Pass,1.5,0,,
+TC-FLT-02,tests/filter.spec.ts,firefox,"Record filtering › TC-FLT-02 filters by the ""Agnos application"" channel",Pass,4.5,0,,
+TC-FLT-02,tests/filter.spec.ts,webkit,"Record filtering › TC-FLT-02 filters by the ""Agnos application"" channel",Pass,4.3,0,,
+TC-FLT-02,tests/filter.spec.ts,chromium,"Record filtering › TC-FLT-02 filters by the ""Siam smile"" channel",Pass,1.4,0,,
+TC-FLT-02,tests/filter.spec.ts,firefox,"Record filtering › TC-FLT-02 filters by the ""Siam smile"" channel",Pass,9.2,0,,
+TC-FLT-02,tests/filter.spec.ts,webkit,"Record filtering › TC-FLT-02 filters by the ""Siam smile"" channel",Pass,6.4,0,,
+TC-FLT-02,tests/filter.spec.ts,chromium,"Record filtering › TC-FLT-02 filters by the ""Vimut hospital"" channel",Pass,1.5,0,,
+TC-FLT-02,tests/filter.spec.ts,firefox,"Record filtering › TC-FLT-02 filters by the ""Vimut hospital"" channel",Pass,16.3,0,,
+TC-FLT-02,tests/filter.spec.ts,webkit,"Record filtering › TC-FLT-02 filters by the ""Vimut hospital"" channel",Pass,6.0,0,,
+TC-FLT-02,tests/filter.spec.ts,chromium,"Record filtering › TC-FLT-02 filters by the ""Vimut telemed"" channel",Pass,3.2,0,,
+TC-FLT-02,tests/filter.spec.ts,firefox,"Record filtering › TC-FLT-02 filters by the ""Vimut telemed"" channel",Pass,4.5,0,,
+TC-FLT-02,tests/filter.spec.ts,webkit,"Record filtering › TC-FLT-02 filters by the ""Vimut telemed"" channel",Pass,7.5,0,,
+TC-FLT-03,tests/filter.spec.ts,chromium,Record filtering › TC-FLT-03 filters to today only,Pass,2.2,0,,
+TC-FLT-03,tests/filter.spec.ts,firefox,Record filtering › TC-FLT-03 filters to today only,Pass,18.7,0,,
+TC-FLT-03,tests/filter.spec.ts,webkit,Record filtering › TC-FLT-03 filters to today only,Pass,21.6,0,,
+TC-FLT-04,tests/filter.spec.ts,chromium,Record filtering › TC-FLT-04 narrows the result set as the date range narrows,Pass,1.9,0,,
+TC-FLT-04,tests/filter.spec.ts,firefox,Record filtering › TC-FLT-04 narrows the result set as the date range narrows,Pass,5.3,0,,
+TC-FLT-04,tests/filter.spec.ts,webkit,Record filtering › TC-FLT-04 narrows the result set as the date range narrows,Pass,6.3,0,,
+TC-FLT-05,tests/filter.spec.ts,chromium,"Record filtering › TC-FLT-05 combines a triage, a channel and a date range",Pass,8.3,0,,
+TC-FLT-05,tests/filter.spec.ts,firefox,"Record filtering › TC-FLT-05 combines a triage, a channel and a date range",Pass,22.9,0,,
+TC-FLT-05,tests/filter.spec.ts,webkit,"Record filtering › TC-FLT-05 combines a triage, a channel and a date range",Pass,22.8,0,,
+TC-FLT-06,tests/filter.spec.ts,chromium,Record filtering › TC-FLT-06 combines a filter with a search term,Pass,1.6,0,,
+TC-FLT-06,tests/filter.spec.ts,firefox,Record filtering › TC-FLT-06 combines a filter with a search term,Pass,4.2,0,,
+TC-FLT-06,tests/filter.spec.ts,webkit,Record filtering › TC-FLT-06 combines a filter with a search term,Pass,8.5,0,,
+TC-FLT-07,tests/filter.spec.ts,chromium,Record filtering › TC-FLT-07 returns to the full list when All is reselected,Pass,15.1,0,,
+TC-FLT-07,tests/filter.spec.ts,firefox,Record filtering › TC-FLT-07 returns to the full list when All is reselected,Pass,27.6,0,,
+TC-FLT-07,tests/filter.spec.ts,webkit,Record filtering › TC-FLT-07 returns to the full list when All is reselected,Pass,8.5,0,,
+TC-LOGIN-01,tests/login.spec.ts,chromium,"Login, logout and session handling › TC-LOGIN-01 signs in with valid credentials",Pass,6.0,0,,
+TC-LOGIN-01,tests/login.spec.ts,firefox,"Login, logout and session handling › TC-LOGIN-01 signs in with valid credentials",Pass,4.9,0,,
+TC-LOGIN-01,tests/login.spec.ts,webkit,"Login, logout and session handling › TC-LOGIN-01 signs in with valid credentials",Pass,7.1,0,,
+TC-LOGIN-02,tests/login.spec.ts,chromium,"Login, logout and session handling › TC-LOGIN-02 rejects a valid user with the wrong password",Pass,2.2,0,,
+TC-LOGIN-02,tests/login.spec.ts,firefox,"Login, logout and session handling › TC-LOGIN-02 rejects a valid user with the wrong password",Pass,3.1,0,,
+TC-LOGIN-02,tests/login.spec.ts,webkit,"Login, logout and session handling › TC-LOGIN-02 rejects a valid user with the wrong password",Pass,6.6,0,,
+TC-LOGIN-03,tests/login.spec.ts,chromium,"Login, logout and session handling › TC-LOGIN-03 rejects an unknown user",Pass,1.7,0,,
+TC-LOGIN-03,tests/login.spec.ts,firefox,"Login, logout and session handling › TC-LOGIN-03 rejects an unknown user",Pass,3.2,0,,
+TC-LOGIN-03,tests/login.spec.ts,webkit,"Login, logout and session handling › TC-LOGIN-03 rejects an unknown user",Pass,5.9,0,,
+TC-LOGIN-04,tests/login.spec.ts,chromium,"Login, logout and session handling › TC-LOGIN-04 keeps Sign in disabled while either field is empty",Pass,1.7,0,,
+TC-LOGIN-04,tests/login.spec.ts,firefox,"Login, logout and session handling › TC-LOGIN-04 keeps Sign in disabled while either field is empty",Pass,3.0,0,,
+TC-LOGIN-04,tests/login.spec.ts,webkit,"Login, logout and session handling › TC-LOGIN-04 keeps Sign in disabled while either field is empty",Pass,5.9,0,,
+TC-LOGIN-05,tests/login.spec.ts,chromium,"Login, logout and session handling › TC-LOGIN-05 rejects a malformed e-mail address",Pass,1.8,0,,
+TC-LOGIN-05,tests/login.spec.ts,firefox,"Login, logout and session handling › TC-LOGIN-05 rejects a malformed e-mail address",Pass,6.5,0,,
+TC-LOGIN-05,tests/login.spec.ts,webkit,"Login, logout and session handling › TC-LOGIN-05 rejects a malformed e-mail address",Pass,6.0,0,,
+TC-LOGIN-06,tests/login.spec.ts,chromium,"Login, logout and session handling › TC-LOGIN-06 returns 401 for bad credentials, not 500 [BUG-004]",Fail,10.8,1,BUG-004,Error: expect(received).toBe(expected) // Object.is equality | Expected: 401 | Received: 500
+TC-LOGIN-06,tests/login.spec.ts,firefox,"Login, logout and session handling › TC-LOGIN-06 returns 401 for bad credentials, not 500 [BUG-004]",Fail,21.3,1,BUG-004,Error: expect(received).toBe(expected) // Object.is equality | Expected: 401 | Received: 500
+TC-LOGIN-06,tests/login.spec.ts,webkit,"Login, logout and session handling › TC-LOGIN-06 returns 401 for bad credentials, not 500 [BUG-004]",Fail,16.7,1,BUG-004,Error: expect(received).toBe(expected) // Object.is equality | Expected: 401 | Received: 500
+TC-LOGIN-07,tests/login.spec.ts,chromium,"Login, logout and session handling › TC-LOGIN-07 logs out and returns to the login screen",Pass,3.3,0,,
+TC-LOGIN-07,tests/login.spec.ts,firefox,"Login, logout and session handling › TC-LOGIN-07 logs out and returns to the login screen",Pass,8.5,0,,
+TC-LOGIN-07,tests/login.spec.ts,webkit,"Login, logout and session handling › TC-LOGIN-07 logs out and returns to the login screen",Flaky,175.2,1,,TimeoutError: page.waitForURL: Timeout 120000ms exceeded.
+TC-LOGIN-08,tests/login.spec.ts,chromium,"Login, logout and session handling › TC-LOGIN-08 clears session and personal data on logout [BUG-002]",Fail,9.0,1,BUG-002,Error: access token must not survive logout
+TC-LOGIN-08,tests/login.spec.ts,firefox,"Login, logout and session handling › TC-LOGIN-08 clears session and personal data on logout [BUG-002]",Fail,46.8,1,BUG-002,Error: access token must not survive logout
+TC-LOGIN-08,tests/login.spec.ts,webkit,"Login, logout and session handling › TC-LOGIN-08 clears session and personal data on logout [BUG-002]",Fail,26.5,1,BUG-002,Error: access token must not survive logout
+TC-LOGIN-09,tests/login.spec.ts,chromium,"Login, logout and session handling › TC-LOGIN-09 keeps the session across a page reload",Pass,2.7,0,,
+TC-LOGIN-09,tests/login.spec.ts,firefox,"Login, logout and session handling › TC-LOGIN-09 keeps the session across a page reload",Pass,7.7,0,,
+TC-LOGIN-09,tests/login.spec.ts,webkit,"Login, logout and session handling › TC-LOGIN-09 keeps the session across a page reload",Pass,8.8,0,,
+TC-LOGIN-10,tests/login.spec.ts,chromium,"Login, logout and session handling › TC-LOGIN-10 sends an unauthenticated visitor to the login screen",Pass,2.9,0,,
+TC-LOGIN-10,tests/login.spec.ts,firefox,"Login, logout and session handling › TC-LOGIN-10 sends an unauthenticated visitor to the login screen",Pass,5.6,0,,
+TC-LOGIN-10,tests/login.spec.ts,webkit,"Login, logout and session handling › TC-LOGIN-10 sends an unauthenticated visitor to the login screen",Pass,7.2,0,,
+TC-NAV-01,tests/navigation.spec.ts,chromium,Dashboard navigation › TC-NAV-01 shows the signed-in user and the Diagnosis List destination,Pass,2.0,0,,
+TC-NAV-01,tests/navigation.spec.ts,firefox,Dashboard navigation › TC-NAV-01 shows the signed-in user and the Diagnosis List destination,Pass,7.1,0,,
+TC-NAV-01,tests/navigation.spec.ts,webkit,Dashboard navigation › TC-NAV-01 shows the signed-in user and the Diagnosis List destination,Pass,4.5,0,,
+TC-NAV-02,tests/navigation.spec.ts,chromium,Dashboard navigation › TC-NAV-02 renders every toolbar control,Pass,1.9,0,,
+TC-NAV-02,tests/navigation.spec.ts,firefox,Dashboard navigation › TC-NAV-02 renders every toolbar control,Pass,14.3,0,,
+TC-NAV-02,tests/navigation.spec.ts,webkit,Dashboard navigation › TC-NAV-02 renders every toolbar control,Pass,8.7,0,,
+TC-NAV-03,tests/navigation.spec.ts,chromium,"Dashboard navigation › TC-NAV-03 opens the ""Completed"" tab and keeps the table rendered",Pass,1.8,0,,
+TC-NAV-03,tests/navigation.spec.ts,firefox,"Dashboard navigation › TC-NAV-03 opens the ""Completed"" tab and keeps the table rendered",Pass,8.5,0,,
+TC-NAV-03,tests/navigation.spec.ts,webkit,"Dashboard navigation › TC-NAV-03 opens the ""Completed"" tab and keeps the table rendered",Pass,5.4,0,,
+TC-NAV-03,tests/navigation.spec.ts,chromium,"Dashboard navigation › TC-NAV-03 opens the ""In progress"" tab and keeps the table rendered",Pass,2.6,0,,
+TC-NAV-03,tests/navigation.spec.ts,firefox,"Dashboard navigation › TC-NAV-03 opens the ""In progress"" tab and keeps the table rendered",Pass,5.0,0,,
+TC-NAV-03,tests/navigation.spec.ts,webkit,"Dashboard navigation › TC-NAV-03 opens the ""In progress"" tab and keeps the table rendered",Pass,5.8,0,,
+TC-NAV-03,tests/navigation.spec.ts,chromium,"Dashboard navigation › TC-NAV-03 opens the ""Open"" tab and keeps the table rendered",Pass,14.7,0,,
+TC-NAV-03,tests/navigation.spec.ts,firefox,"Dashboard navigation › TC-NAV-03 opens the ""Open"" tab and keeps the table rendered",Pass,8.4,0,,
+TC-NAV-03,tests/navigation.spec.ts,webkit,"Dashboard navigation › TC-NAV-03 opens the ""Open"" tab and keeps the table rendered",Pass,5.9,0,,
+TC-NAV-04,tests/navigation.spec.ts,chromium,"Dashboard navigation › TC-NAV-04 adds a ""Completed by"" column on the Completed tab only",Pass,19.8,0,,
+TC-NAV-04,tests/navigation.spec.ts,firefox,"Dashboard navigation › TC-NAV-04 adds a ""Completed by"" column on the Completed tab only",Pass,5.8,0,,
+TC-NAV-04,tests/navigation.spec.ts,webkit,"Dashboard navigation › TC-NAV-04 adds a ""Completed by"" column on the Completed tab only",Pass,4.9,0,,
+TC-NAV-05,tests/navigation.spec.ts,chromium,"Dashboard navigation › TC-NAV-05 exposes the ""All"" triage chip",Pass,7.2,0,,
+TC-NAV-05,tests/navigation.spec.ts,firefox,"Dashboard navigation › TC-NAV-05 exposes the ""All"" triage chip",Pass,10.8,0,,
+TC-NAV-05,tests/navigation.spec.ts,webkit,"Dashboard navigation › TC-NAV-05 exposes the ""All"" triage chip",Pass,16.5,0,,
+TC-NAV-05,tests/navigation.spec.ts,chromium,"Dashboard navigation › TC-NAV-05 exposes the ""Emergency"" triage chip",Pass,1.6,0,,
+TC-NAV-05,tests/navigation.spec.ts,firefox,"Dashboard navigation › TC-NAV-05 exposes the ""Emergency"" triage chip",Pass,6.5,0,,
+TC-NAV-05,tests/navigation.spec.ts,webkit,"Dashboard navigation › TC-NAV-05 exposes the ""Emergency"" triage chip",Pass,4.8,0,,
+TC-NAV-05,tests/navigation.spec.ts,chromium,"Dashboard navigation › TC-NAV-05 exposes the ""Seek Medical"" triage chip",Pass,2.8,0,,
+TC-NAV-05,tests/navigation.spec.ts,firefox,"Dashboard navigation › TC-NAV-05 exposes the ""Seek Medical"" triage chip",Pass,23.9,0,,
+TC-NAV-05,tests/navigation.spec.ts,webkit,"Dashboard navigation › TC-NAV-05 exposes the ""Seek Medical"" triage chip",Pass,4.1,0,,
+TC-NAV-05,tests/navigation.spec.ts,chromium,"Dashboard navigation › TC-NAV-05 exposes the ""Self care"" triage chip",Pass,3.4,0,,
+TC-NAV-05,tests/navigation.spec.ts,firefox,"Dashboard navigation › TC-NAV-05 exposes the ""Self care"" triage chip",Pass,3.4,0,,
+TC-NAV-05,tests/navigation.spec.ts,webkit,"Dashboard navigation › TC-NAV-05 exposes the ""Self care"" triage chip",Pass,3.8,0,,
+TC-NAV-05,tests/navigation.spec.ts,chromium,"Dashboard navigation › TC-NAV-05 exposes the ""Urgent"" triage chip",Pass,2.4,0,,
+TC-NAV-05,tests/navigation.spec.ts,firefox,"Dashboard navigation › TC-NAV-05 exposes the ""Urgent"" triage chip",Pass,4.8,0,,
+TC-NAV-05,tests/navigation.spec.ts,webkit,"Dashboard navigation › TC-NAV-05 exposes the ""Urgent"" triage chip",Pass,5.6,0,,
+TC-NAV-06,tests/navigation.spec.ts,chromium,Dashboard navigation › TC-NAV-06 opens and closes the channel dropdown,Pass,1.9,0,,
+TC-NAV-06,tests/navigation.spec.ts,firefox,Dashboard navigation › TC-NAV-06 opens and closes the channel dropdown,Pass,7.0,0,,
+TC-NAV-06,tests/navigation.spec.ts,webkit,Dashboard navigation › TC-NAV-06 opens and closes the channel dropdown,Pass,10.9,0,,
+TC-NAV-07,tests/navigation.spec.ts,chromium,Dashboard navigation › TC-NAV-07 offers the documented date-range presets,Pass,1.8,0,,
+TC-NAV-07,tests/navigation.spec.ts,firefox,Dashboard navigation › TC-NAV-07 offers the documented date-range presets,Pass,10.6,0,,
+TC-NAV-07,tests/navigation.spec.ts,webkit,Dashboard navigation › TC-NAV-07 offers the documented date-range presets,Pass,8.6,0,,
+TC-NAV-08,tests/navigation.spec.ts,chromium,Dashboard navigation › TC-NAV-08 restores the selected tab after a reload,Fail,5.1,1,OBS-02,Error: expect(received).toContain(expected) // indexOf
+TC-NAV-08,tests/navigation.spec.ts,firefox,Dashboard navigation › TC-NAV-08 restores the selected tab after a reload,Fail,51.3,1,OBS-02,Error: expect(received).toContain(expected) // indexOf
+TC-NAV-08,tests/navigation.spec.ts,webkit,Dashboard navigation › TC-NAV-08 restores the selected tab after a reload,Fail,28.0,1,OBS-02,Error: expect(received).toContain(expected) // indexOf
+TC-REG-01,tests/registration.spec.ts,chromium,User registration › TC-REG-01 registers a new account with valid details,Pass,7.5,0,,
+TC-REG-01,tests/registration.spec.ts,firefox,User registration › TC-REG-01 registers a new account with valid details,Pass,10.1,0,,
+TC-REG-01,tests/registration.spec.ts,webkit,User registration › TC-REG-01 registers a new account with valid details,Pass,10.9,0,,
+TC-REG-02,tests/registration.spec.ts,chromium,User registration › TC-REG-02 rejects mismatched password confirmation,Pass,3.1,0,,
+TC-REG-02,tests/registration.spec.ts,firefox,User registration › TC-REG-02 rejects mismatched password confirmation,Pass,15.4,0,,
+TC-REG-02,tests/registration.spec.ts,webkit,User registration › TC-REG-02 rejects mismatched password confirmation,Pass,4.1,0,,
+TC-REG-03,tests/registration.spec.ts,chromium,User registration › TC-REG-03 rejects a password shorter than 8 characters,Pass,2.5,0,,
+TC-REG-03,tests/registration.spec.ts,firefox,User registration › TC-REG-03 rejects a password shorter than 8 characters,Pass,23.5,0,,
+TC-REG-03,tests/registration.spec.ts,webkit,User registration › TC-REG-03 rejects a password shorter than 8 characters,Pass,5.0,0,,
+TC-REG-04,tests/registration.spec.ts,chromium,User registration › TC-REG-04 rejects a password with no uppercase letter,Pass,1.8,0,,
+TC-REG-04,tests/registration.spec.ts,firefox,User registration › TC-REG-04 rejects a password with no uppercase letter,Pass,11.6,0,,
+TC-REG-04,tests/registration.spec.ts,webkit,User registration › TC-REG-04 rejects a password with no uppercase letter,Pass,4.4,0,,
+TC-REG-05,tests/registration.spec.ts,chromium,User registration › TC-REG-05 rejects a password with no digit,Pass,2.3,0,,
+TC-REG-05,tests/registration.spec.ts,firefox,User registration › TC-REG-05 rejects a password with no digit,Pass,9.2,0,,
+TC-REG-05,tests/registration.spec.ts,webkit,User registration › TC-REG-05 rejects a password with no digit,Pass,4.8,0,,
+TC-REG-06,tests/registration.spec.ts,chromium,User registration › TC-REG-06 rejects a password with no special character,Pass,2.2,0,,
+TC-REG-06,tests/registration.spec.ts,firefox,User registration › TC-REG-06 rejects a password with no special character,Pass,6.7,0,,
+TC-REG-06,tests/registration.spec.ts,webkit,User registration › TC-REG-06 rejects a password with no special character,Pass,7.7,0,,
+TC-REG-07,tests/registration.spec.ts,chromium,"User registration › TC-REG-07 accepts ""!"" as a special character [BUG-005]",Fail,46.6,1,BUG-005,Error: expect(locator).toBeHidden() failed | Expected: hidden | Received: visible
+TC-REG-07,tests/registration.spec.ts,firefox,"User registration › TC-REG-07 accepts ""!"" as a special character [BUG-005]",Fail,59.4,1,BUG-005,Error: expect(locator).toBeHidden() failed | Expected: hidden | Received: visible
+TC-REG-07,tests/registration.spec.ts,webkit,"User registration › TC-REG-07 accepts ""!"" as a special character [BUG-005]",Fail,74.9,1,BUG-005,Error: expect(locator).toBeHidden() failed | Expected: hidden | Received: visible
+TC-REG-08,tests/registration.spec.ts,chromium,User registration › TC-REG-08 rejects a malformed e-mail address,Pass,2.2,0,,
+TC-REG-08,tests/registration.spec.ts,firefox,User registration › TC-REG-08 rejects a malformed e-mail address,Pass,3.9,0,,
+TC-REG-08,tests/registration.spec.ts,webkit,User registration › TC-REG-08 rejects a malformed e-mail address,Pass,4.7,0,,
+TC-REG-09,tests/registration.spec.ts,chromium,User registration › TC-REG-09 keeps Confirm disabled until every field is filled,Pass,2.0,0,,
+TC-REG-09,tests/registration.spec.ts,firefox,User registration › TC-REG-09 keeps Confirm disabled until every field is filled,Pass,4.7,0,,
+TC-REG-09,tests/registration.spec.ts,webkit,User registration › TC-REG-09 keeps Confirm disabled until every field is filled,Pass,4.7,0,,
+TC-SRCH-01,tests/search.spec.ts,chromium,Record search › TC-SRCH-01 searches for a record created during the run,Fail,690.0,1,BUG-001,Error: expect(received).toBeGreaterThan(expected) | Expected: > 0 | Received: 0
+TC-SRCH-01,tests/search.spec.ts,firefox,Record search › TC-SRCH-01 searches for a record created during the run,Fail,612.0,1,BUG-001,Error: expect(received).toBeGreaterThan(expected) | Expected: > 0 | Received: 0
+TC-SRCH-01,tests/search.spec.ts,webkit,Record search › TC-SRCH-01 searches for a record created during the run,Fail,312.0,1,BUG-001,TimeoutError: page.waitForURL: Timeout 90000ms exceeded. | Expected: > 0 | Received: 0
+TC-SRCH-02,tests/search.spec.ts,chromium,Record search › TC-SRCH-02 returns an empty result for an unknown term,Pass,1.7,0,,
+TC-SRCH-02,tests/search.spec.ts,firefox,Record search › TC-SRCH-02 returns an empty result for an unknown term,Pass,6.7,0,,
+TC-SRCH-02,tests/search.spec.ts,webkit,Record search › TC-SRCH-02 returns an empty result for an unknown term,Pass,7.4,0,,
+TC-SRCH-03,tests/search.spec.ts,chromium,Record search › TC-SRCH-03 restores the full list when the search is cleared,Pass,2.0,0,,
+TC-SRCH-03,tests/search.spec.ts,firefox,Record search › TC-SRCH-03 restores the full list when the search is cleared,Pass,4.9,0,,
+TC-SRCH-03,tests/search.spec.ts,webkit,Record search › TC-SRCH-03 restores the full list when the search is cleared,Pass,7.5,0,,
+TC-SRCH-04,tests/search.spec.ts,chromium,Record search › TC-SRCH-04 handles a SQL-injection style term safely,Pass,1.7,0,,
+TC-SRCH-04,tests/search.spec.ts,firefox,Record search › TC-SRCH-04 handles a SQL-injection style term safely,Pass,4.5,0,,
+TC-SRCH-04,tests/search.spec.ts,webkit,Record search › TC-SRCH-04 handles a SQL-injection style term safely,Pass,6.1,0,,
+TC-SRCH-05,tests/search.spec.ts,chromium,Record search › TC-SRCH-05 does not execute script injected through the search box,Pass,1.6,0,,
+TC-SRCH-05,tests/search.spec.ts,firefox,Record search › TC-SRCH-05 does not execute script injected through the search box,Pass,6.1,0,,
+TC-SRCH-05,tests/search.spec.ts,webkit,Record search › TC-SRCH-05 does not execute script injected through the search box,Pass,5.9,0,,
+TC-SRCH-06,tests/search.spec.ts,chromium,Record search › TC-SRCH-06 treats a whitespace-only term as an empty search,Pass,14.8,0,,
+TC-SRCH-06,tests/search.spec.ts,firefox,Record search › TC-SRCH-06 treats a whitespace-only term as an empty search,Pass,4.9,0,,
+TC-SRCH-06,tests/search.spec.ts,webkit,Record search › TC-SRCH-06 treats a whitespace-only term as an empty search,Pass,6.2,0,,
+TC-SRCH-07,tests/search.spec.ts,chromium,Record search › TC-SRCH-07 keeps the typed term visible after searching,Pass,1.9,0,,
+TC-SRCH-07,tests/search.spec.ts,firefox,Record search › TC-SRCH-07 keeps the typed term visible after searching,Pass,8.9,0,,
+TC-SRCH-07,tests/search.spec.ts,webkit,Record search › TC-SRCH-07 keeps the typed term visible after searching,Pass,4.8,0,,

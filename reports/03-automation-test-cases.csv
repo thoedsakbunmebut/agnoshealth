@@ -1,0 +1,48 @@
+﻿Automation ID,Spec File,Test Name,Module,Maps to Manual Case,Automation Type,What it Verifies,Key Assertion,Known Defect,Notes
+AT-SETUP-01,tests/auth.setup.ts,authenticate as the shared dashboard user,Setup,TC-LOGIN-01,Setup,Signs in once per run and caches the session to playwright/.auth/user.json,Log Out button is visible and the URL is /ai_dashboard,,Every browser project depends on this; it is the suite's entry-criteria check
+AT-REG-01,tests/registration.spec.ts,TC-REG-01 ...,Registration,TC-REG-01,Positive,Registers a new account with a unique e-mail and a valid password,'Your account has been created' is visible and the app returns to the login page,,Creates a real pending-approval account on the dev environment
+AT-REG-02,tests/registration.spec.ts,TC-REG-02 ...,Registration,TC-REG-02,Negative,Confirm Password must match Password,'Confirm password does not match the password.' is visible,,
+AT-REG-03,tests/registration.spec.ts,TC-REG-03 ...,Registration,TC-REG-03,Negative,Rejects a password shorter than 8 characters,The password policy message is visible,,
+AT-REG-04,tests/registration.spec.ts,TC-REG-04 ...,Registration,TC-REG-04,Negative,Rejects a password with no uppercase letter,The password policy message is visible,,
+AT-REG-05,tests/registration.spec.ts,TC-REG-05 ...,Registration,TC-REG-05,Negative,Rejects a password with no digit,The password policy message is visible,,
+AT-REG-06,tests/registration.spec.ts,TC-REG-06 ...,Registration,TC-REG-06,Negative,Rejects a password with no special character,The password policy message is visible,,
+AT-REG-07,tests/registration.spec.ts,TC-REG-07 ...,Registration,TC-REG-07,Regression,Asserts that '!' is accepted as a special character,The password policy message is hidden,BUG-005,Fails today - the assertion encodes the correct behaviour
+AT-REG-08,tests/registration.spec.ts,TC-REG-08 ...,Registration,TC-REG-08,Negative,Rejects a malformed e-mail address,The account-created message stays hidden,,
+AT-REG-09,tests/registration.spec.ts,TC-REG-09 ...,Registration,TC-REG-09,Boundary,Confirm stays disabled until all three fields are filled,Button enablement is re-checked after each field,,
+AT-LOGIN-01,tests/login.spec.ts,TC-LOGIN-01 ...,Login,TC-LOGIN-01,Positive,Signs in with the shared credentials,"Log Out is visible, URL is /ai_dashboard, the search box is rendered",,
+AT-LOGIN-02,tests/login.spec.ts,TC-LOGIN-02 ...,Login,TC-LOGIN-02,Negative,Rejects a valid user with the wrong password,The credentials error is visible and Log Out stays hidden,,
+AT-LOGIN-03,tests/login.spec.ts,TC-LOGIN-03 ...,Login,TC-LOGIN-03,Negative,Rejects an unknown user,The same generic error is shown - no user enumeration,,
+AT-LOGIN-04,tests/login.spec.ts,TC-LOGIN-04 ...,Login,TC-LOGIN-04,Boundary,Sign in stays disabled while either field is empty,Enablement is re-checked after filling and clearing each field,,
+AT-LOGIN-05,tests/login.spec.ts,TC-LOGIN-05 ...,Login,TC-LOGIN-05,Negative,Rejects a malformed e-mail address,Log Out stays hidden,,
+AT-LOGIN-06,tests/login.spec.ts,TC-LOGIN-06 ...,Login,TC-LOGIN-11,API contract,"Failed sign-in must answer 401, not 500",The /api/ai_dashboard/login response status is 401,BUG-004,Fails today - currently 500
+AT-LOGIN-07,tests/login.spec.ts,TC-LOGIN-07 ...,Login,TC-LOGIN-06,Positive,Signs out and returns to the login screen,URL matches /ai_dashboard/login and the e-mail field is visible,,
+AT-LOGIN-08,tests/login.spec.ts,TC-LOGIN-08 ...,Login,TC-LOGIN-07,Security,Logout must clear the token and patient PII,"localStorage session, user and persist:root are all null",BUG-002,Fails today - all three survive logout
+AT-LOGIN-09,tests/login.spec.ts,TC-LOGIN-09 ...,Login,TC-LOGIN-08,Positive,Session survives a page reload,Log Out is still visible and the login form is hidden,,
+AT-LOGIN-10,tests/login.spec.ts,TC-LOGIN-10 ...,Login,TC-LOGIN-09,Security,An unauthenticated visitor is sent to the login screen,The e-mail field and Sign in button are visible,,
+AT-NAV-01,tests/navigation.spec.ts,TC-NAV-01 ...,Navigation,TC-NAV-01,Positive,Sidebar shows the user and the Diagnosis List destination,The nav entry and Log Out are visible,,
+AT-NAV-02,tests/navigation.spec.ts,TC-NAV-02 ...,Navigation,TC-NAV-02,Positive,All toolbar controls render,"Download, date, Channel, search, Search and the counter are visible",,
+AT-NAV-03,tests/navigation.spec.ts,TC-NAV-03 ...,Navigation,"TC-NAV-03, TC-NAV-04, TC-NAV-05",Positive,Each status tab loads and keeps the table rendered,Table and counter stay visible on each tab,BUG-001,Data-driven over the three tabs; structural only while the list is empty
+AT-NAV-04,tests/navigation.spec.ts,TC-NAV-04 ...,Navigation,TC-NAV-06,Positive,Completed adds a 'Completed by' column,Header arrays are compared exactly for Open and Completed,,
+AT-NAV-05,tests/navigation.spec.ts,TC-NAV-05 ...,Navigation,TC-NAV-07,Positive,Each triage chip is present,Data-driven over the five chips,,
+AT-NAV-06,tests/navigation.spec.ts,TC-NAV-06 ...,Navigation,TC-NAV-08,Positive,Channel dropdown opens and lists every channel,All four channel labels are visible,,
+AT-NAV-07,tests/navigation.spec.ts,TC-NAV-07 ...,Navigation,TC-NAV-09,Positive,Date-range picker offers the documented presets,Six representative presets are visible,,
+AT-NAV-08,tests/navigation.spec.ts,TC-NAV-08 ...,Navigation,TC-NAV-10,Regression,The selected tab should survive a reload,The Completed-only column is still present after a reload,,Fails today - tab state is not in the URL
+AT-SRCH-01,tests/search.spec.ts,TC-SRCH-01 ...,Search,TC-SRCH-01,End-to-end,"Generates a record in the consumer app, then searches for it in the dashboard",Total cases > 0 and the Diagnosis column contains the generated diagnosis,BUG-001,Marked test.slow(); the questionnaire takes minutes
+AT-SRCH-02,tests/search.spec.ts,TC-SRCH-02 ...,Search,TC-SRCH-02,Negative,An unknown term returns an empty result,Total cases is 0 and the empty state is visible,BUG-003,Passes vacuously while the list is always empty
+AT-SRCH-03,tests/search.spec.ts,TC-SRCH-03 ...,Search,TC-SRCH-03,Positive,Clearing the search restores the baseline count,The count returns to its starting value,BUG-001,
+AT-SRCH-04,tests/search.spec.ts,TC-SRCH-04 ...,Search,TC-SRCH-06,Security,A SQL-injection style term is handled safely,The table stays rendered and no database error text appears,,
+AT-SRCH-05,tests/search.spec.ts,TC-SRCH-05 ...,Search,TC-SRCH-07,Security,Injected script is not executed,No dialog event fires during the search,,Listens on page.on('dialog')
+AT-SRCH-06,tests/search.spec.ts,TC-SRCH-06 ...,Search,TC-SRCH-08,Boundary,A whitespace-only term behaves as an empty search,The count matches the baseline,,
+AT-SRCH-07,tests/search.spec.ts,TC-SRCH-07 ...,Search,TC-SRCH-09,Usability,The typed term stays in the box after searching,The input still holds the term,,
+AT-FLT-01,tests/filter.spec.ts,TC-FLT-01 ...,Filter,TC-FLT-01 to TC-FLT-04,Positive,Filters by each triage in turn,"Rows are returned, or the documented empty state is shown",BUG-001,Data-driven over four triages
+AT-FLT-02,tests/filter.spec.ts,TC-FLT-02 ...,Filter,TC-FLT-05 to TC-FLT-08,Positive,Filters by each channel in turn,Every visible Channel cell matches the selected channel,BUG-001,"Data-driven over four channels; asserts row contents, not just counts"
+AT-FLT-03,tests/filter.spec.ts,TC-FLT-03 ...,Filter,TC-FLT-09,Positive,Filters to today only,Every Date-time value falls on today's date,BUG-001,
+AT-FLT-04,tests/filter.spec.ts,TC-FLT-04 ...,Filter,TC-FLT-10,Boundary,A narrower date range never returns more records,Today's count is <= the 90-day count,BUG-001,
+AT-FLT-05,tests/filter.spec.ts,TC-FLT-05 ...,Filter,TC-FLT-11,Positive,"Combines a triage, a channel and a date range",The table and counter stay rendered through all three selections,BUG-001,
+AT-FLT-06,tests/filter.spec.ts,TC-FLT-06 ...,Filter,TC-FLT-12,Positive,Combines a filter with a search term,The searched count is <= the filtered count,BUG-001,
+AT-FLT-07,tests/filter.spec.ts,TC-FLT-07 ...,Filter,TC-FLT-13,Positive,Reselecting All restores the baseline,The count returns to its starting value,BUG-001,
+AT-DL-01,tests/download.spec.ts,TC-DL-01 ...,Download,TC-DL-01,Positive,Download opens a confirmation modal,Confirm and cancel actions are both visible,,
+AT-DL-02,tests/download.spec.ts,TC-DL-02 ...,Download,TC-DL-02,Negative,Cancelling downloads nothing,No download event fires and the modal closes,,
+AT-DL-03,tests/download.spec.ts,TC-DL-03 ...,Download,TC-DL-03,Positive,Confirming downloads a non-empty CSV,A .csv download arrives and its first line contains a delimiter,BUG-007,Fails today - no file is produced
+AT-DL-04,tests/download.spec.ts,TC-DL-04 ...,Download,TC-DL-04,Negative,Exporting with no records must give feedback,Either a download or an API request must occur,BUG-007,Fails today - a silent no-op
+AT-DL-05,tests/download.spec.ts,TC-DL-05 ...,Download,TC-DL-05,Positive,The export respects the active tab and filters,A .csv download arrives after filtering,"BUG-001, BUG-007",Fails today

@@ -1,0 +1,77 @@
+﻿AGNOS AI SCREENING DASHBOARD - TEST PLAN
+
+Field,Value
+Document,Test Plan v1.0
+System under test,Agnos AI Screening Dashboard (dev)
+Prepared for,"Agnos Health - Candidate Assignment, Software Tester"
+Date,2026-09-16
+Dashboard URL,https://dev.app.agnoshealth.com/ai_dashboard
+Sign-up URL,https://dev.app.agnoshealth.com/ai_dashboard/agnos/sign_up
+Record generator,https://dev.app.agnoshealth.com
+API,https://dev.api.agnoshealth.com
+Test account,test@gmail.com (hospital 12345)
+Browsers,"Chromium 153, Firefox, WebKit (Playwright 1.63.0)"
+OS,macOS 26.6
+Automation stack,Playwright Test + TypeScript + Node 22
+
+OBJECTIVES
+1,"Verify hospital staff can register, sign in and sign out safely"
+2,Verify the Diagnosis List presents records accurately and can be searched and filtered
+3,Verify records can be exported to CSV
+4,"Identify defects affecting patient follow-up, with reproducible evidence"
+5,Leave an automated regression suite that can run on every build
+
+SCOPE
+In scope,What is covered
+User registration,"Field validation, password policy, duplicate handling, approval flow"
+Login / logout,"Valid and invalid credentials, empty fields, session persistence, session teardown"
+Navigation,"Status tabs, triage chips, toolbar controls, table columns, pagination"
+Record search,"Positive search, no-results, clearing, injection-style input"
+Filtering,"Triage, date range, channel, and combinations"
+Download,"Confirmation modal, CSV contents, filter-aware export"
+Cross-browser,"Chromium, Firefox, WebKit"
+
+Out of scope,Reason
+Consumer symptom-check app,Used only as a tool to generate test records
+Load / stress / performance,Not requested by the brief
+Penetration testing,Security issues reported when they surface functionally; no dedicated assessment
+Mobile and tablet layouts,The dashboard is a desktop staff tool
+Clinical accuracy of the AI model,Out of a functional tester's remit
+
+ENTRY CRITERIA
+1,The dev environment is reachable and the shared account can sign in
+2,The record generator can produce a new AI record
+3,Playwright and its browsers are installed
+
+EXIT CRITERIA
+1,Every designed test case has been executed and has a recorded result
+2,Every failure has a defect report with reproduction steps and evidence
+3,No Blocker or Critical defect is left unreported
+4,The automated suite runs end to end and its results are published
+
+DEFECT SEVERITY
+Blocker,A core feature cannot be used at all; testing of dependent areas cannot proceed
+High,Major function broken or data/security at risk; no reasonable workaround
+Medium,"A function misbehaves but a workaround exists, or error handling misleads the user"
+Low,"Cosmetic, copy, or minor inconsistency with no functional impact"
+
+DEFECT PRIORITY
+P1,Fix before release
+P2,Fix in the current cycle
+P3,Fix when convenient
+
+RISKS AND MITIGATIONS
+Risk,Impact,Mitigation
+Record-listing API returns 500 for every request (BUG-001),"Search, filter, pagination and download cannot be verified end to end",Reported as a Blocker; affected cases recorded as Failed/Blocked with API evidence rather than silently skipped
+The shared account has no records,Table-dependent assertions have nothing to act on,Tests generate their own records and tolerate empty results
+Other testers mutate shared data mid-run,Flaky counts,Assertions check that visible rows satisfy the filter rather than pinning exact counts
+The SPA needs 25-30 s to become interactive,Default timeouts fail spuriously,Timeouts raised deliberately in playwright.config.ts; no waitForTimeout in specs
+New accounts require approval,A registered account cannot be used to log in,Registration tests stop at the confirmation message
+
+DELIVERABLES
+1,Test plan (this sheet)
+2,Manual test cases - tab 02
+3,Automation test cases - tab 03
+4,Execution summary - tab 04
+5,Defect report - tab 05
+6,Automated suite + README in the GitHub repository
