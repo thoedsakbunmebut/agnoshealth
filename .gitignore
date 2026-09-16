@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Playwright artefacts
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+/.playwright-cli/
+
+# Generated machine-readable results (the committed CSVs under reports/ are the deliverable)
+/reports/results.json
+
+# Secrets and local environment
+.env
+.env.local
+
+# OS noise
+.DS_Store
+*.log

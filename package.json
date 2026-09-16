@@ -1,0 +1,26 @@
+{
+  "name": "test_agnoshealth",
+  "version": "1.0.0",
+  "description": "Playwright end-to-end test suite for the Agnos Health AI Screening Dashboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:headed": "playwright test --project=chromium --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen https://dev.app.agnoshealth.com/ai_dashboard"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.20.3",
+    "dotenv": "^17.4.2"
+  }
+}
