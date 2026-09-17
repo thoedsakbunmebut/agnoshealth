@@ -45,8 +45,7 @@ Reproduced **every** time. Verified with:
 ### Impact
 The dashboard can never display a record. `Total cases : 0` and the empty state
 `ยังไม่มีข้อมูลการวินิจฉัย` are shown permanently. This blocks end-to-end verification of
-**record search, triage/date/channel filtering, pagination, record detail and CSV download** —
-four of the six scenarios in the assignment brief.
+**record search, triage/date/channel filtering, pagination, record detail and CSV download**.
 
 **Evidence:** `docs/screenshots/recon-02-dashboard.png`, `docs/screenshots/recon-14-download.png`
 

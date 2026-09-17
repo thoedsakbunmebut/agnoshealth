@@ -4,7 +4,6 @@
 |---|---|
 | Document | Test Plan v1.0 |
 | System under test | Agnos AI Screening Dashboard (dev) |
-| Prepared for | Agnos Health — Candidate Assignment, Software Tester |
 | Date | 2026-09-16 |
 
 ## 1. Introduction
@@ -18,11 +17,14 @@ navigation, record search, filtering and CSV export.
 
 ## 2. Objectives
 
-1. Verify that hospital staff can register, sign in and sign out safely.
-2. Verify that the Diagnosis List presents records accurately and can be searched and filtered.
-3. Verify that records can be exported.
-4. Identify defects that would affect patient follow-up, and report them with reproducible evidence.
-5. Leave behind an automated regression suite that can be re-run on every build.
+1. Verify User registration 
+2. Verify User login/logout
+3. Verify Navigate through different tabs/pages of the website
+4. Verify Search for an record
+5. Filter records by triages , dates or channels
+6. Download records
+7. Identify defects that would affect patient follow-up, and report them with reproducible evidence.
+8. Automated regression suite that can be re-run on every build.
 
 ## 3. Scope
 
@@ -42,8 +44,7 @@ navigation, record search, filtering and CSV export.
 - Load, stress and performance testing.
 - Penetration testing. Security issues are reported when they surface during functional testing
   (see BUG-002), but no dedicated security assessment was performed.
-- Mobile and tablet layouts — the dashboard is a desktop staff tool and the brief does not
-  mention mobile.
+- Mobile and tablet layouts — the dashboard is a desktop staff tool.
 - The AI diagnosis model's clinical accuracy.
 
 ## 4. Test environment
@@ -120,4 +121,4 @@ diagnosis record through the consumer app rather than relying on existing rows.
 2. Manual and automation test cases (`reports/02-manual-test-cases.csv`, `reports/03-automation-test-cases.csv`).
 3. Execution results (`reports/04-execution-summary.csv`).
 4. Defect reports with screenshots (`docs/bug-reports.md`, `docs/screenshots/`).
-5. The automated suite and its README.
+5. The automated regression suite and its README.

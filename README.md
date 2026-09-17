@@ -1,7 +1,6 @@
 # Agnos AI Screening Dashboard — Playwright Test Suite
 
-End-to-end test suite for the **Agnos AI Screening Dashboard**, built for the Agnos Health
-Candidate Assignment (Software Tester).
+End-to-end test suite for the **Agnos AI Screening Dashboard**.
 
 The dashboard is the hospital-staff side of Agnos AI: patients run a symptom check in the consumer
 app, and the resulting records land here for staff to review, follow up and export. This repository
@@ -88,7 +87,7 @@ docs/
   bug-reports.md         Defect reports with reproduction steps
   screenshots/           Evidence captured during manual execution
 
-reports/                 CSVs for the Google Sheet deliverable
+reports/                 Test plan, test cases, execution results and defects as CSV
 ```
 
 ## Design decisions
@@ -135,4 +134,4 @@ once the defects are fixed — which is the point of a regression suite.
 - **Test plan** — [`docs/test-plan.md`](docs/test-plan.md)
 - **Defects** — [`docs/bug-reports.md`](docs/bug-reports.md)
 - **Application map** — [`docs/app-map.md`](docs/app-map.md)
-- **CSVs for the Google Sheet** — [`reports/`](reports/)
+- **Test cases and results (CSV)** — [`reports/`](reports/)

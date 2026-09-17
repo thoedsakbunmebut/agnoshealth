@@ -3,7 +3,7 @@
 Field,Value
 Document,Test Plan v1.0
 System under test,Agnos AI Screening Dashboard (dev)
-Prepared for,"Agnos Health - Candidate Assignment, Software Tester"
+Owner,QA / Test Engineering
 Date,2026-09-16
 Dashboard URL,https://dev.app.agnoshealth.com/ai_dashboard
 Sign-up URL,https://dev.app.agnoshealth.com/ai_dashboard/agnos/sign_up
@@ -33,7 +33,7 @@ Cross-browser,"Chromium, Firefox, WebKit"
 
 Out of scope,Reason
 Consumer symptom-check app,Used only as a tool to generate test records
-Load / stress / performance,Not requested by the brief
+Load / stress / performance,Not in scope for this functional cycle
 Penetration testing,Security issues reported when they surface functionally; no dedicated assessment
 Mobile and tablet layouts,The dashboard is a desktop staff tool
 Clinical accuracy of the AI model,Out of a functional tester's remit
@@ -70,8 +70,8 @@ New accounts require approval,A registered account cannot be used to log in,Regi
 
 DELIVERABLES
 1,Test plan (this sheet)
-2,Manual test cases - tab 02
-3,Automation test cases - tab 03
-4,Execution summary - tab 04
-5,Defect report - tab 05
-6,Automated suite + README in the GitHub repository
+2,Manual test cases
+3,Automation test cases
+4,Execution summary
+5,Defect report
+6,Automated regression suite and README

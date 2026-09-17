@@ -4,9 +4,9 @@ Guidance for Claude Code when working in this repository.
 
 ## What this repo is
 
-A **Playwright end-to-end test suite** built for the Agnos Health "Candidate Assignment — Software Tester" brief (see `Candidate Assignment Agnos - Software tester(1).md`). It is a test project only — there is no application source here. The system under test is the **Agnos AI Dashboard**, a hosted web app used by hospital staff to review AI symptom-check records.
-
-Current state: fresh `npm init playwright@latest` scaffold. `tests/example.spec.ts` is the generated demo against `playwright.dev` and should be replaced by real Agnos dashboard specs.
+A **Playwright end-to-end test suite** for the **Agnos AI Screening Dashboard**, a hosted web app
+used by hospital staff to review AI symptom-check records. There is no application source here —
+this repository contains tests, test documentation and test reports only.
 
 ## System under test
 
@@ -14,41 +14,69 @@ Current state: fresh `npm init playwright@latest` scaffold. `tests/example.spec.
 |---|---|
 | Dashboard / login | `https://dev.app.agnoshealth.com/ai_dashboard` |
 | Sign up | `https://dev.app.agnoshealth.com/ai_dashboard/agnos/sign_up` |
-| Record generator (creates new AI records to test against) | `https://dev.app.agnoshealth.com` |
+| Record generator (consumer app, used to create AI records to test against) | `https://dev.app.agnoshealth.com` |
+| Backend API | `https://dev.api.agnoshealth.com` |
 
-Shared test credentials are in the assignment markdown file. This is a **dev environment** — never point tests at a production Agnos host.
+Credentials and URLs live in `.env` (gitignored); `.env.example` is the committed template.
+This is a **dev environment** — never point tests at a production Agnos host.
+
+**Known blocker:** `POST /api/ai_dashboard/dashboard` currently returns HTTP 500 for every request,
+so the dashboard never lists a record. See `docs/bug-reports.md` → BUG-001 before debugging any
+test that depends on table data.
 
 ## Commands
 
 ```bash
-npx playwright test                      # run all tests, all browsers
-npx playwright test --project=chromium   # single browser
-npx playwright test tests/login.spec.ts  # single file
-npx playwright test --ui                 # interactive UI mode
-npx playwright test --debug              # step debugger
-npx playwright show-report               # open the HTML report
-npx playwright codegen https://dev.app.agnoshealth.com/ai_dashboard  # record a flow
+npm test                  # all specs, all three browsers
+npm run test:chromium     # single browser - fastest feedback
+npm run test:headed       # watch it run
+npm run test:ui           # interactive UI mode
+npm run test:debug        # step debugger
+npm run report            # open the HTML report
+npm run codegen           # record a flow
+
+npx playwright test tests/login.spec.ts   # one spec
+npx playwright test -g "TC-LOGIN-01"      # one test by name
 ```
 
-`package.json` has no `scripts` — invoke Playwright via `npx` directly.
+Passing `--reporter=...` on the CLI **overrides** the config's reporter list, which suppresses
+`reports/results.json`. Run plain `npm test` when you need that file.
 
-## Configuration notes (`playwright.config.ts`)
+## Layout
 
-- `testDir: ./tests`, `fullyParallel: true`, reporter `html`.
-- Three projects enabled: chromium, firefox, webkit. Mobile and branded-browser projects are commented out.
-- `baseURL` is **commented out**. Either uncomment it and use relative `page.goto('/...')`, or keep absolute URLs — do not mix styles within the suite.
-- CI behaviour is env-driven: `CI=1` turns on `forbidOnly`, 2 retries, and single-worker runs.
-- No `webServer` block — the target is a remote host, so nothing is started locally.
+```
+tests/      auth.setup.ts + one spec per scenario area
+pages/      Page Object Model - all locators live here
+fixtures/   test-fixtures.ts injects page objects; exports the `anonymous` opt-out
+utils/      test-data.ts (credentials, generators) and record-generator.ts
+docs/       test-plan.md, app-map.md, bug-reports.md, screenshots/
+reports/    test plan, test cases, execution results and defects as CSV
+```
 
-## Conventions for new tests
+`docs/app-map.md` records the application's real locators, enum values, API contract and load
+timings, captured by driving the live environment. **Read it before writing new locators** rather
+than guessing at the markup.
 
-- One spec file per scenario area from the brief: registration, login/logout, tab navigation, record search, filtering (triage / date / channel), record download.
-- Prefer user-facing locators (`getByRole`, `getByLabel`, `getByPlaceholder`) over CSS/XPath selectors.
-- Use web-first assertions (`await expect(locator).toBeVisible()`) rather than manual waits or `waitForTimeout`.
-- For flows needing an authenticated session, use Playwright's storage-state pattern — `.gitignore` already reserves `/playwright/.auth/` for the saved state file.
-- Keep credentials and environment URLs out of spec bodies; the config already sketches a `dotenv` setup (commented at the top of `playwright.config.ts`) if secrets are needed.
-- Tests hit a live shared dev environment: make them independent and tolerant of pre-existing data, and generate fresh records via the generator link rather than assuming fixed rows exist.
+## Conventions
 
-## Deliverables the assignment expects
+- One spec file per scenario area: registration, login/logout, tab navigation, record search,
+  filtering (triage / date / channel), record download.
+- Prefer user-facing locators (`getByRole`, `getByLabel`, `getByPlaceholder`). Where the app
+  exposes no accessible name, fall back to an id or positional locator **and comment why** — see
+  `pages/LoginPage.ts` and `pages/SignUpPage.ts` for the existing precedent.
+- Use web-first assertions (`await expect(locator).toBeVisible()`). **Never `waitForTimeout`.**
+- Timeouts in `playwright.config.ts` are deliberately high: the SPA needs 25–30 s to become
+  interactive on a cold load. Do not lower them to "fix" a flake.
+- Authenticated flows inherit the storage state written by `tests/auth.setup.ts`. Specs that must
+  start logged out use `test.use(anonymous)`.
+- Tests hit a live shared environment: make them independent, tolerant of pre-existing data, and
+  have them generate their own records via `utils/record-generator.ts` rather than assuming fixed
+  rows exist.
+- Tests assert **correct** behaviour even where the application is currently wrong. Such tests
+  carry a `known-defect` annotation naming the bug, so the report explains the failure. Do not
+  weaken an assertion to make a suite green — fix the app or leave the failure visible.
 
-Automated test scripts, a README with setup/run instructions, and a test report (manual + automated results, with screenshots for failures). Failure artefacts land in `test-results/` and `playwright-report/`, both gitignored.
+## Artefacts
+
+`test-results/`, `playwright-report/` and `reports/results.json` are generated and gitignored.
+The committed CSVs under `reports/` are maintained deliberately, not overwritten by a run.
